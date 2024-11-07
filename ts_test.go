@@ -3,6 +3,8 @@ package main
 import (
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTsFromFileName(t *testing.T) {
@@ -50,9 +52,6 @@ func TestTsFromFileName(t *testing.T) {
 
 	for _, test := range tests {
 		actual := tsFromFileName(test.fname)
-
-		if actual == nil || !actual.Equal(test.expected) {
-			t.Errorf("For filename %s, expected %v, got %v", test.fname, test.expected, actual)
-		}
+		assert.Equal(t, test.expected, *actual)
 	}
 }
