@@ -1,7 +1,10 @@
 # Exifixer
 
-Find JPEG files which are named like Whatsapp images,
-and add an EXIF timestamp tag to them if they do not already have one.
+Sometimes, I put pictures received via Whatsapp into my photo collection directory structure.
+This tool add date/time EXIF metadata to those images, implied from their file names,
+so that [Photoprism](https://github.com/photoprism/photoprism) can sort them correctly in the timeline.
+
+Only files which do not already have date/time EXIF metadata are modified.
 
 Needs exiftool installed (`sudo apt-get install exiftool`).
 
