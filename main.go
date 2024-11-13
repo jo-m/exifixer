@@ -45,45 +45,53 @@ type file struct {
 	ext     string
 }
 
-func handleFile(f file, et *exiftool.Exiftool, dryRun bool) {
+const (
+	keyDt  = "DateTimeOriginal"
+	keyOfs = "OffsetTimeOriginal"
+)
+
+func handleFile(f file, et *exiftool.Exiftool, dryRun bool) error {
 	log := log.With().Str("path", f.relPath).Str("ext", f.ext).Logger()
 	log.Debug().Msg("handling file")
 
-	// TODO: Support more.
+	// TODO: Support more extensions.
 	if f.ext != "jpg" {
 		log.Debug().Msg("not supported, skipping")
-		return
+		return nil
 	}
 
-	meta := et.ExtractMetadata(f.path)[0]
+	meta := et.ExtractMetadata(f.path)[0] // Should never panic because we read 1 file.
 	hasDateTime := false
 	for k := range meta.Fields {
 		if strings.Contains(k, "DateTime") {
 			hasDateTime = true
 			val, err := meta.GetString(k)
 			if err != nil {
-				panic(err)
+				log.Err(err).Msg("invalid metadata format")
+				return err
 			}
-			meta.GetString(k)
 			log.Trace().Str("k", k).Str("v", val).Msg("date field")
 		}
 	}
 
 	if hasDateTime {
 		log.Debug().Msg("file already has datetime metadata, skipping")
-		return
+		return nil
 	}
 
 	ts := f.ts.Format("2006:01:02 15:04:05")
 	ofs := f.ts.Format("-07:00")
+
 	if dryRun {
-		log.Warn().Str("DateTimeOriginal", ts).Str("OffsetTimeOriginal", ofs).Msg("would write to file (dry run)")
-		return
+		log.Warn().Str(keyDt, ts).Str(keyOfs, ofs).Msg("would write to file (dry run)")
+		return nil
 	}
 
-	log.Warn().Str("DateTimeOriginal", ts).Str("OffsetTimeOriginal", ofs).Msg("write to file")
-	// TODO: actually write.
-
+	log.Warn().Str(keyDt, ts).Str(keyOfs, ofs).Msg("write to file")
+	meta.SetString(keyDt, ts)
+	meta.SetString(keyOfs, ofs)
+	et.WriteMetadata([]exiftool.FileMetadata{meta})
+	return meta.Err
 }
 
 func main() {
@@ -143,6 +151,9 @@ func main() {
 	}
 	defer et.Close()
 	for file := range files {
-		handleFile(file, et, f.DryRun)
+		err := handleFile(file, et, f.DryRun)
+		if err != nil {
+			log.Panic().Err(err).Str("file", file.relPath).Msg("failed to process file")
+		}
 	}
 }
