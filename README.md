@@ -10,7 +10,7 @@ Needs exiftool installed (`sudo apt-get install exiftool`).
 
 ```
 $ go install github.com/jo-m/exifixer@latest
-$ ./exifixer --help
+$ exifixer --help
 Exifixer finds media files with missing EXIF tags,
         tries to imply the timestamp from the file name,
         and stores it in the file as EXIF tag.
