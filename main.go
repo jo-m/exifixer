@@ -9,8 +9,8 @@ import (
 
 	"github.com/alexflint/go-arg"
 	"github.com/barasher/go-exiftool"
-	"github.com/jo-m/exifixer/internal/pkg/logging"
 	"github.com/rs/zerolog/log"
+	"jo-m.ch/go/exifixer/internal/pkg/logging"
 )
 
 type flags struct {

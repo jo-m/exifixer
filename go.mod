@@ -1,4 +1,4 @@
-module github.com/jo-m/exifixer
+module jo-m.ch/go/exifixer
 
 go 1.23.2
 
