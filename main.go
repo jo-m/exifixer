@@ -63,7 +63,7 @@ func handleFile(f file, et *exiftool.Exiftool, dryRun bool) error {
 	meta := et.ExtractMetadata(f.path)[0] // Should never panic because we read 1 file.
 	hasDateTime := false
 	for k := range meta.Fields {
-		if strings.Contains(k, "DateTime") {
+		if strings.Contains(k, "DateTimeOriginal") {
 			hasDateTime = true
 			val, err := meta.GetString(k)
 			if err != nil {
