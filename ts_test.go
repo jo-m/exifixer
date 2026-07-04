@@ -48,6 +48,14 @@ func TestTsFromFileName(t *testing.T) {
 			fname:    "WhatsApp Image 2022-08-08 at 4.30.35 PM(1).jpeg",
 			expected: time.Date(2022, 8, 8, 16, 30, 35, 0, loc),
 		},
+		{
+			fname:    "photo_2026-06-24_20-10-36.jpg",
+			expected: time.Date(2026, 6, 24, 20, 10, 36, 0, loc),
+		},
+		{
+			fname:    "photo_2026-06-24_20-10-36 (2).jpg",
+			expected: time.Date(2026, 6, 24, 20, 10, 36, 0, loc),
+		},
 	}
 
 	for _, test := range tests {

@@ -34,6 +34,10 @@ var patterns = []struct {
 		re:     regexp.MustCompile(`WhatsApp (?:Image|Video) ([0-9\-]{10}) at ([0-9.APM ]{10,11})(?:\(\d+\))?`),
 		layout: "2006-01-02  3.04.05 PM",
 	},
+	{
+		re:     regexp.MustCompile(`photo_(\d{4}-\d{2}-\d{2})_(\d{2}-\d{2}-\d{2})(?: \(\d+\))?`),
+		layout: "2006-01-02  15-04-05",
+	},
 }
 
 func tsFromFileName(fname string) *time.Time {
